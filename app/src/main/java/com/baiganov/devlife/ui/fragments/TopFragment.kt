@@ -136,6 +136,7 @@ class TopFragment : Fragment() {
 
     private fun showProgressBar() {
         binding.apply {
+            recyclerView.visibility = View.VISIBLE
             progressBar.visibility = View.VISIBLE
             btnBack.visibility = View.VISIBLE
             btnNext.visibility = View.VISIBLE
