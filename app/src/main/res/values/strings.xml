@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">DevLife</string>
+    <string name="desc_button_back">Button Back</string>
+    <string name="desc_button_next">Button Next</string>
+    <string name="title">Developers Life</string>
+    <string name="description">Deserunt dolore dolorem doloribus est fuga impedit magni, natus, neque nihil quasi quidem repellendus rerum suscipit veritatis vitae.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="tv_no_internet">Произошла ошибка при загрузке данных. Проверьте подключение к сети</string>
+    <string name="btn_label_retry">Повторить</string>
+    <string name="sign_cloud">sign cloud</string>
+    <string name="gif">gif</string>
+</resources>

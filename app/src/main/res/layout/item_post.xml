@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="model"
+            type="com.baiganov.devlife.models.ResultItem" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/itemCardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/small_margin"
+            app:cardCornerRadius="15dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp">
+
+                <ImageView
+                    android:id="@+id/postImageView"
+                    loadImageFromUrl="@{model.gifURL}"
+                    android:layout_width="0dp"
+                    android:layout_height="300dp"
+                    android:contentDescription="@string/gif"
+                    android:maxHeight="300dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:srcCompat="@drawable/ic_place_holder" />
+
+                <View
+                    android:id="@+id/gradient_overlay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    android:background="@drawable/gradient_overlay"
+                    app:layout_constraintBottom_toBottomOf="@+id/postImageView"
+                    app:layout_constraintEnd_toEndOf="@+id/postImageView"
+                    app:layout_constraintStart_toStartOf="@+id/postImageView"
+                    app:layout_constraintTop_toTopOf="@+id/postImageView"
+                    app:layout_constraintVertical_bias="1.0" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/descriptionTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/small_margin"
+                    android:paddingEnd="@dimen/small_margin"
+                    android:paddingBottom="@dimen/small_margin"
+                    android:text="@{model.description}"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/normal_text_size"
+                    app:layout_constraintBottom_toBottomOf="@id/postImageView"
+                    app:layout_constraintEnd_toEndOf="@id/postImageView"
+                    app:layout_constraintStart_toStartOf="@id/postImageView"
+                    app:layout_constraintTop_toTopOf="@+id/postImageView"
+                    app:layout_constraintVertical_bias="1.0"
+                    tools:text="@string/description" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/authorTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/small_margin"
+                    android:ellipsize="end"
+                    android:gravity="start"
+                    android:maxLength="20"
+                    android:maxLines="1"
+                    android:text="@{model.author}"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/normal_text_size"
+                    app:drawableStartCompat="@drawable/ic_round_person_24"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/dateTextView"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/dateTextView"
+                    tools:text="Author" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/dateTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/normal_margin"
+                    android:layout_marginEnd="@dimen/small_margin"
+                    android:ellipsize="end"
+                    android:gravity="end"
+                    android:maxLength="24"
+                    android:maxLines="1"
+                    android:text="@{model.date}"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/normal_text_size"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/authorTextView"
+                    app:layout_constraintTop_toBottomOf="@id/descriptionTextView"
+                    tools:text="Aug 05, 2021 1:33:10 PM" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </FrameLayout>
+</layout>
