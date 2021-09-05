@@ -4,8 +4,9 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.baiganov.devlife.util.Constants.Companion.SECTION_TABLE
 
-@Entity(tableName = "section_table",
+@Entity(tableName = SECTION_TABLE,
         foreignKeys = [ForeignKey(
         entity = ResultItem::class, parentColumns = arrayOf("id"), childColumns = arrayOf("fk_id")
     )],

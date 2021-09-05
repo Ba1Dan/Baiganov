@@ -19,6 +19,8 @@ import javax.inject.Singleton
 object NetworkModule {
 
     private const val BASE_URL = "https://developerslife.ru"
+    private const val QUERY_PARAMETER = "json"
+    private const val QUERY_VALUE = "true"
 
     @Singleton
     @Provides
@@ -62,7 +64,7 @@ object NetworkModule {
             val orUrl = orReq.url
 
             val url = orUrl.newBuilder()
-                .addQueryParameter("json", "true")
+                .addQueryParameter(QUERY_PARAMETER, QUERY_VALUE)
                 .build()
 
             val request = orReq

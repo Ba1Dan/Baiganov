@@ -15,6 +15,7 @@ class Constants {
 
         //Room Database
         const val DATABASE_NAME = "posts_database"
-        const val RECIPES_TABLE = "posts_table"
+        const val POSTS_TABLE = "posts_table"
+        const val SECTION_TABLE = "section_table"
     }
 }

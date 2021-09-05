@@ -5,18 +5,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.baiganov.devlife.R
 import com.baiganov.devlife.adapters.PostAdapter
 import com.baiganov.devlife.databinding.FragmentBaseBinding
 import com.baiganov.devlife.models.ResultItem
-import com.baiganov.devlife.util.Constants
 import com.baiganov.devlife.util.Constants.Companion.SECTION_HOT
 import com.baiganov.devlife.util.NetworkResult
 import com.baiganov.devlife.viemodels.MainViewModel
@@ -30,7 +27,7 @@ class HotFragment : Fragment() {
 
     private var _binding: FragmentBaseBinding? = null
     private val binding get() = _binding!!
-    private var page = 0;
+    private var page = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +37,7 @@ class HotFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentBaseBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
 

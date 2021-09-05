@@ -4,7 +4,6 @@ import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -60,6 +59,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
+
     private fun offlineCache(data: List<ResultItem>, section: String) {
         val sections = mutableListOf<Section>()
         data.forEach { post ->
@@ -103,18 +103,14 @@ class MainViewModel @Inject constructor(
 
     private fun handlePostsResponse(response: Response<Result>, cacheData: MutableList<ResultItem>): NetworkResult<List<ResultItem>> {
         when {
-            response.message().toString().contains("timeout") -> {
-                return NetworkResult.Error(message = "Timeout")
-            }
-            response.code() == 402 -> {
-                return NetworkResult.Error(message="API Key Limited.")
+            response.message().toString().contains(CHECKING_CONTAINS) -> {
+                return NetworkResult.Error(message = MESSAGE_TIMEOUT)
             }
             response.body()?.result.isNullOrEmpty() -> {
-                return NetworkResult.Error(message="Posts not found.")
+                return NetworkResult.Error(message = MESSAGE_NO_FOUND)
             }
             response.isSuccessful -> {
                 val result: List<ResultItem> = response.body()!!.result
-                Log.d("mainViewModel", "result $result")
                 cacheData.addAll(result)
                 return NetworkResult.Success(cacheData)
             }
@@ -127,13 +123,13 @@ class MainViewModel @Inject constructor(
     private fun showError(section: String) {
         when(section) {
             SECTION_LATEST -> {
-                _lastPostsResponse.value = NetworkResult.Error(message = "Posts not found.")
+                _lastPostsResponse.value = NetworkResult.Error(message = MESSAGE_NO_FOUND)
             }
             SECTION_TOP -> {
-                _topPostResponse.value = NetworkResult.Error(message = "Posts not found.")
+                _topPostResponse.value = NetworkResult.Error(message = MESSAGE_NO_FOUND)
             }
             SECTION_HOT -> {
-                _hotPostResponse.value = NetworkResult.Error(message = "Posts not found.")
+                _hotPostResponse.value = NetworkResult.Error(message = MESSAGE_NO_FOUND)
             }
         }
     }
@@ -154,13 +150,13 @@ class MainViewModel @Inject constructor(
     private fun showNoInternetConnection(section: String) {
         when(section) {
             SECTION_LATEST -> {
-                _lastPostsResponse.value = NetworkResult.Error(message = "No Network Connection")
+                _lastPostsResponse.value = NetworkResult.Error(message = MESSAGE_NOT_NETWORK)
             }
             SECTION_TOP -> {
-                _topPostResponse.value = NetworkResult.Error(message = "No Network Connection")
+                _topPostResponse.value = NetworkResult.Error(message = MESSAGE_NOT_NETWORK)
             }
             SECTION_HOT -> {
-                _hotPostResponse.value = NetworkResult.Error(message = "No Network Connection")
+                _hotPostResponse.value = NetworkResult.Error(message = MESSAGE_NOT_NETWORK)
             }
         }
     }
@@ -177,5 +173,12 @@ class MainViewModel @Inject constructor(
             capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
             else -> false
         }
+    }
+
+    companion object {
+        private const val MESSAGE_NOT_NETWORK = "No Network Connection"
+        private const val MESSAGE_NO_FOUND = "Posts not found"
+        private const val MESSAGE_TIMEOUT = "Timeout"
+        private const val CHECKING_CONTAINS = "timeout"
     }
 }
