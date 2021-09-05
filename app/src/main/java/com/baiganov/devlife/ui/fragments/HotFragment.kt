@@ -1,6 +1,7 @@
 package com.baiganov.devlife.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,9 +49,14 @@ class HotFragment : Fragment() {
         setupRecyclerView(layoutManager)
         setupClickListeners(layoutManager)
 
-        mainViewModel.getData(SECTION_HOT, page++)
+        mainViewModel.getData(SECTION_HOT, page)
         mainViewModel.hotPostResponse.observe(viewLifecycleOwner, { response ->
             handleNetworkResult(response, layoutManager)
+            if (savedInstanceState != null) {
+                val position = savedInstanceState.getInt("position")
+                Log.d(javaClass.simpleName, "position: $position")
+                binding.recyclerView.scrollToPosition(position)
+            }
         })
 
         return binding.root
@@ -64,6 +70,7 @@ class HotFragment : Fragment() {
                     mAdapter.setData(it)
                     binding.recyclerView.smoothScrollToPosition(layoutManager.findLastCompletelyVisibleItemPosition() + 1)
                 }
+                page++
             }
             is NetworkResult.Error -> {
                 hideProgressBar()
@@ -109,12 +116,12 @@ class HotFragment : Fragment() {
                 binding.recyclerView.smoothScrollToPosition(layoutManager.findLastCompletelyVisibleItemPosition() + 1)
             }
             if (layoutManager.findLastCompletelyVisibleItemPosition() == (mAdapter.itemCount - 1)) {
-                mainViewModel.getData(SECTION_HOT, page++)
+                mainViewModel.getData(SECTION_HOT, page)
             }
         }
 
         binding.btnRetry.setOnClickListener {
-            mainViewModel.getData(Constants.SECTION_LATEST, --page)
+            mainViewModel.getData(SECTION_HOT, page)
         }
 
         binding.recyclerView.addOnScrollListener( object : RecyclerView.OnScrollListener() {
@@ -168,5 +175,10 @@ class HotFragment : Fragment() {
             imgCloud.visibility = View.VISIBLE
             tvError.visibility = View.VISIBLE
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }

@@ -5,14 +5,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.baiganov.devlife.R
 import com.baiganov.devlife.adapters.PostAdapter
 import com.baiganov.devlife.databinding.FragmentBaseBinding
 import com.baiganov.devlife.models.ResultItem
@@ -34,7 +32,6 @@ class TopFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("MainViewModel", javaClass.simpleName)
         mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
     }
 
@@ -49,7 +46,7 @@ class TopFragment : Fragment() {
         setupRecyclerView(layoutManager)
         setupClickListeners(layoutManager)
 
-        mainViewModel.getData(SECTION_TOP, page++)
+        mainViewModel.getData(SECTION_TOP, page)
         mainViewModel.topPostResponse.observe(viewLifecycleOwner, { response ->
             handleNetworkResult(response, layoutManager)
         })
@@ -64,6 +61,7 @@ class TopFragment : Fragment() {
                     mAdapter.setData(it)
                     binding.recyclerView.smoothScrollToPosition(layoutManager.findLastCompletelyVisibleItemPosition() + 1)
                 }
+                page++
             }
             is NetworkResult.Error -> {
                 hideProgressBar()
@@ -93,7 +91,6 @@ class TopFragment : Fragment() {
 
     private fun setupClickListeners(layoutManager: LinearLayoutManager) {
         binding.btnBack.setOnClickListener {
-            Log.d("btnBack", layoutManager.findLastCompletelyVisibleItemPosition().toString())
             if (layoutManager.findLastCompletelyVisibleItemPosition() > 0) {
                 binding.recyclerView.smoothScrollToPosition(layoutManager.findLastCompletelyVisibleItemPosition() - 1)
             }
@@ -110,12 +107,12 @@ class TopFragment : Fragment() {
                 binding.recyclerView.smoothScrollToPosition(layoutManager.findLastCompletelyVisibleItemPosition() + 1)
             }
             if (layoutManager.findLastCompletelyVisibleItemPosition() == (mAdapter.itemCount - 1)) {
-                mainViewModel.getData(SECTION_TOP, page++)
+                mainViewModel.getData(SECTION_TOP, page)
             }
         }
 
         binding.btnRetry.setOnClickListener {
-            mainViewModel.getData(Constants.SECTION_LATEST, --page)
+            mainViewModel.getData(SECTION_TOP, page)
         }
 
         binding.recyclerView.addOnScrollListener( object : RecyclerView.OnScrollListener() {
@@ -169,5 +166,10 @@ class TopFragment : Fragment() {
             imgCloud.visibility = View.VISIBLE
             tvError.visibility = View.VISIBLE
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }

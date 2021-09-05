@@ -26,6 +26,7 @@ class LatestFragment : Fragment() {
 
     private lateinit var mAdapter: PostAdapter
     private lateinit var mainViewModel: MainViewModel
+    private lateinit var layoutManager: LinearLayoutManager
 
     private var _binding: FragmentBaseBinding? = null
     private val binding get() = _binding!!
@@ -49,23 +50,16 @@ class LatestFragment : Fragment() {
         binding.btnBack.startAnimation(leftToCenter)
         binding.btnNext.startAnimation(rightToCenter)
 
-        val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
         setupRecyclerView(layoutManager)
         setupClickListeners(layoutManager)
 
-        mainViewModel.getData(SECTION_LATEST, page++)
+        mainViewModel.getData(SECTION_LATEST, page)
         mainViewModel.lastPostsResponse.observe(viewLifecycleOwner, { response ->
-            Log.d(javaClass.simpleName, response.data?.size.toString())
             handleNetworkResult(response, layoutManager)
         })
-
         return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
     }
 
     private fun handleNetworkResult(
@@ -79,6 +73,7 @@ class LatestFragment : Fragment() {
                     mAdapter.setData(it)
                     binding.recyclerView.smoothScrollToPosition(layoutManager.findLastCompletelyVisibleItemPosition() + 1)
                 }
+                page++
             }
             is NetworkResult.Error -> {
                 hideProgressBar()
@@ -124,7 +119,7 @@ class LatestFragment : Fragment() {
                 binding.recyclerView.smoothScrollToPosition(layoutManager.findLastCompletelyVisibleItemPosition() + 1)
             }
             if (layoutManager.findLastCompletelyVisibleItemPosition() == (mAdapter.itemCount - 1)) {
-                mainViewModel.getData(SECTION_LATEST, page++)
+                mainViewModel.getData(SECTION_LATEST, page)
             }
         }
 
@@ -143,7 +138,7 @@ class LatestFragment : Fragment() {
         })
 
         binding.btnRetry.setOnClickListener {
-            mainViewModel.getData(SECTION_LATEST, --page)
+            mainViewModel.getData(SECTION_LATEST, page)
         }
     }
 
@@ -184,5 +179,10 @@ class LatestFragment : Fragment() {
             imgCloud.visibility = View.VISIBLE
             tvError.visibility = View.VISIBLE
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }

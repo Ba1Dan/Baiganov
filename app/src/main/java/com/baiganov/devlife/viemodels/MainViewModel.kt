@@ -41,7 +41,7 @@ class MainViewModel @Inject constructor(
         getPostsSafeCall(section, page)
     }
 
-    fun deleteAll() = viewModelScope.launch(Dispatchers.IO) {
+    fun clearDb() = viewModelScope.launch(Dispatchers.IO) {
         repository.local.deleteAll()
     }
 
